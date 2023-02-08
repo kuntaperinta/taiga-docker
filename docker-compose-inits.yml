@@ -2,15 +2,15 @@ version: "3.5"
 
 x-environment:
   &default-back-environment
-  POSTGRES_DB: taiga
-  POSTGRES_USER: taiga
-  POSTGRES_PASSWORD: taiga
-  POSTGRES_HOST: taiga-db
-  TAIGA_SECRET_KEY: "taiga-back-secret-key"
+  POSTGRES_DB: §{POSTGRES_DB}
+  POSTGRES_USER: §{POSTGRES_USER}
+  POSTGRES_PASSWORD: §{POSTGRES_PASSWORD}
+  POSTGRES_HOST: §{POSTGRES_HOST}
+  TAIGA_SECRET_KEY: "§{TAIGA_SECRET_KEY}"
   # these rabbitmq settings should be the same as
   # in taiga-rabbitmq and taiga-events services
-  RABBITMQ_USER: taiga
-  RABBITMQ_PASS: taiga
+  RABBITMQ_USER: §{RABBITMQ_USER}
+  RABBITMQ_PASS: §{RABBITMQ_PASS}
   CELERY_ENABLED: "False"
 
 x-volumes:
@@ -22,6 +22,10 @@ x-volumes:
 services:
   taiga-manage:
     image: taigaio/taiga-back:latest
+    env_file:
+      - ./.env
+      - ./pg.env
+      - ./rabbit.env
     environment: *default-back-environment
     depends_on:
       - taiga-db
